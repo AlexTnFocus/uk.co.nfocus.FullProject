@@ -18,6 +18,12 @@
                         <Property Name="DisplayName" Value="LoggingInWithValidCredentials" />
                       </Rule>
                     </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="uk.co.nfocus.FullProject.Features.LoginAndLogoutManagementFeature.LoggingOutOfAnAccount" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="LoggingOutOfAnAccount" />
+                      </Rule>
+                    </Rule>
                   </Rule>
                 </Rule>
               </Rule>
