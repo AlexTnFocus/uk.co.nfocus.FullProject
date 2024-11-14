@@ -1,12 +1,7 @@
 ﻿//ShopPage Get rid of mouse move, generic method for adding to cart
 
 using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static uk.co.nfocus.FullProject.Utilities.HelperLib;
 
 namespace FullProject.POMs
 {
@@ -20,7 +15,7 @@ namespace FullProject.POMs
         }
 
         //Locators for elements on the 'Shop' Page
-
+        public IWebElement InitialCartContents => driver.FindElement(By.CssSelector("a[title='View your shopping cart'] span[class='count']"));
 
 
         //Procedures for the 'Shop' Page
@@ -28,8 +23,14 @@ namespace FullProject.POMs
         {
             Console.WriteLine($"a[aria-label='Add “{itemName}” to your cart']");
             driver.FindElement(By.CssSelector($"a[aria-label='Add “{itemName}” to your cart']")).Click();
-            
-            
+        }
+        public string GetCartContents()
+        {
+            return driver.FindElement(By.CssSelector("a[title='View your shopping cart'] span[class='count']")).Text;
+        }
+        public void WaitForCartUpdate(string CC)
+        {
+            WaitForElementNotEquals(driver, By.CssSelector("a[title='View your shopping cart'] span[class='count']"), CC);
         }
 
 

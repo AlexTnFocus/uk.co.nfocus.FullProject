@@ -78,10 +78,10 @@ namespace uk.co.nfocus.FullProject.Features
 #line 5
 #line hidden
 #line 6
-testRunner.Given("I am logged in to my account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+testRunner.Given("I am logged in to my account using \'magmortar@pmail.com\' and \'octoberComic0n!?\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 7
-testRunner.And("I have an item in my cart", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+testRunner.And("I have an item \'Belt\' in my cart", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
         }
         

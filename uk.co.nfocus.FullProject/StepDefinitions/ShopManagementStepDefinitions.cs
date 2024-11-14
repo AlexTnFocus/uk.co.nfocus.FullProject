@@ -7,33 +7,38 @@ using FluentAssertions;
 using static uk.co.nfocus.FullProject.StepDefinitions.Hooks;
 using System.Security.Cryptography.X509Certificates;
 using FullProject.POMs;
+using static OpenQA.Selenium.Screenshot;
 
 namespace uk.co.nfocus.FullProject.StepDefinitions
 {
     [Binding]
     public class ShopManagementStepDefinitions
     {
-        [Given(@"I am logged in to my account")]
-        public void GivenIAmLoggedInToMyAccount()
+
+
+
+        [Given(@"I am logged in to my account using '([^']*)' and '([^']*)'")]
+        public void GivenIAmLoggedInToMyAccountUsingAnd(string username, string password)
         {
             driver.Url = "https://www.edgewordstraining.co.uk/demo-site/my-account/";
             Console.WriteLine("Launched Website");
             driver.FindElement(By.LinkText("Dismiss")).Click(); //Make part of myaccountpage POM
             Console.WriteLine("Dismissed bottom banner");
             MyAccountPage MyAccountPage = new MyAccountPage(driver);
-            MyAccountPage.CompleteLogin("magmortar@pmail.com", "octoberComic0n!?");
+            MyAccountPage.CompleteLogin(username, password);
             Console.WriteLine("Logged in");
         }
-
-        [Given(@"I have an item in my cart")]
-        public void GivenIHaveAnItemInMyCart()
+        [Given(@"I have an item '([^']*)' in my cart")]
+        public void GivenIHaveAnItemInMyCart(string item)
         {
             NavigationPage NavigationPage = new NavigationPage(driver);
             ShopPage ShopPage = new ShopPage(driver);
             NavigationPage.GoShop();
             Console.WriteLine("Navigated to shop page");
-            ShopPage.AddItemToCart("Belt");
-            Console.WriteLine("Added an item to cart");
+            string CurrentCart = ShopPage.GetCartContents();
+            ShopPage.AddItemToCart(item);
+            Console.WriteLine($"Added an item {item} to cart");
+            ShopPage.WaitForCartUpdate(CurrentCart);
         }
 
         [Given(@"I am looking at the cart contents")]
@@ -53,6 +58,7 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
             Console.WriteLine("Typed in the coupon edgewords");
             CartPage.ClickCouponButton();
             Console.WriteLine("Clicked enter coupon button");
+            //TakeScreenshot(driver, "TestSSS.png");
             //Possibly make this one function
         }
 
@@ -60,10 +66,12 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         public void ThenTheCouponShouldTakeOffThePrice(int discountPer)
         {
             CartPage CartPage = new CartPage(driver);
-            CartPage.WaitForProperTotal2();
-            Assert.That((Decimal.Divide((Decimal.Parse(CartPage.GetSubtotal()) - Decimal.Parse(CartPage.GetDiscount())), Decimal.Parse(CartPage.GetSubtotal()))),
-                Is.EqualTo(0.85),
-                "Discount is not valid for 15% off");
+            CartPage.WaitForProperTotal();
+            double discountReverse = 1-((double)discountPer / 100);
+            decimal discountActual = (Decimal.Divide((Decimal.Parse(CartPage.GetSubtotal()) - Decimal.Parse(CartPage.GetDiscount())), Decimal.Parse(CartPage.GetSubtotal())));
+            Console.WriteLine(discountReverse);
+            Assert.That(discountActual, Is.EqualTo(discountReverse),
+                $"Discount is not valid for {discountPer}% off, it is valid for {(1 - discountActual)*100}% off");
             Console.WriteLine(CartPage.GetSubtotal().ToString());
             Console.WriteLine(CartPage.GetDiscount().ToString());
         }
@@ -72,16 +80,13 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         public void ThenTheTotalAfterShippingShouldBeCorrect()
         {
             CartPage CartPage = new CartPage(driver);
+            
             Assert.That(Decimal.Parse(CartPage.GetSubtotal()) -
                 Decimal.Parse(CartPage.GetDiscount())
                 + Decimal.Parse(CartPage.GetShipping()),
                 Is.EqualTo(Decimal.Parse(CartPage.GetTotal())),
                 "Error, total after shipping is incorrect");
             Console.WriteLine("Coupon is valid for 15% off");
-            /*NavigationPage NavigationPage = new NavigationPage(driver);
-            MyAccountPage MyAccountPage = new MyAccountPage(driver);
-            NavigationPage.GoMyAccount();
-            MyAccountPage.ClickLogout();//Add logout to teardown, not here*/
         }
 
         [Given(@"I have proceeded to the checkout")]
@@ -127,6 +132,13 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
             OrderPage OrderPage = new OrderPage(driver);
             Assert.That(OrderNumber, Is.EqualTo(OrderPage.GetTopOrderNum()), "Order numbers do not match");
             Console.WriteLine($"Confirmed order numbers {OrderNumber} and {OrderPage.GetTopOrderNum()} match");
+        }
+        public void TakeScreenshot(IWebDriver driver, string screenshotName)
+        {
+            ITakesScreenshot ssdriver = driver as ITakesScreenshot;
+            Screenshot screenshot = ssdriver.GetScreenshot();
+            screenshot.SaveAsFile(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\" +
+                screenshotName);
         }
     }
 }

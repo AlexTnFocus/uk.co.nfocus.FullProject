@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FullProject.POMs;
+using System.Security.Cryptography.X509Certificates;
 
 namespace uk.co.nfocus.FullProject.StepDefinitions
 {
@@ -20,7 +21,15 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         [Before] //Similar to NUnit [SetUp]
         public static void SetUp()
         {
-            driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--start-maximized");
+            driver = new ChromeDriver(options);
+
+            //Creates a folder for the screenshots
+            string basePath = @"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots";
+            string folderName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"); // Format: YYYY-MM-DD_HH-MM-SS
+            string fullPath = Path.Combine(basePath, folderName);
+            Directory.CreateDirectory(fullPath);
         }
         [After] //Similar to NUnit [TearDown]
         public static void TearDown()

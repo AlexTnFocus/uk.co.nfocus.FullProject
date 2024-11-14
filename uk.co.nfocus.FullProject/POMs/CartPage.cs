@@ -47,10 +47,6 @@ namespace FullProject.POMs
         }
         public void WaitForProperTotal()
         {
-            WaitForElementPresent(driver, By.CssSelector("tr[class='cart-subtotal'] bdi:nth-child(1)"));
-        }
-        public void WaitForProperTotal2()
-        {
             WaitForElementPresent(driver, By.CssSelector("tr[class='cart-discount coupon-edgewords'] th"));
         }
         public void ResetCoupon()

@@ -8,6 +8,7 @@ using OpenQA.Selenium.Chrome;
 using System.Threading;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Support;
+using OpenQA.Selenium.Support.Extensions;
 
 namespace uk.co.nfocus.FullProject.Utilities
 {
@@ -38,5 +39,11 @@ namespace uk.co.nfocus.FullProject.Utilities
                 }
             });
         }
+        public static void WaitForElementNotEquals(IWebDriver driver, By theElement, string linkText)
+        {
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait.Until(drv => drv.FindElement(theElement).Text != linkText);
+        }
+
     }
 }
