@@ -1,10 +1,5 @@
-﻿//Make a completed order page POM
-//GetOrderNumber should be a locator
-//EnterFullBilling pass values not hard coded
-
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using static uk.co.nfocus.FullProject.Utilities.HelperLib;
-
 
 namespace FullProject.POMs
 {
@@ -30,49 +25,45 @@ namespace FullProject.POMs
         public IWebElement CheckoutOrderNum => driver.FindElement(By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"));
 
         //Functions for the 'Checkout' page
-        public void KeyIntoFNF(string keyData)
+        public void KeyIntoFNF(string keyData)//Writes into the first name field
         {
             FirstNameField.SendKeys(keyData);
         }
-        public void KeyIntoLNF(string keyData)
+        public void KeyIntoLNF(string keyData)//Writes into the last name field
         {
             LastNameField.SendKeys(keyData);
         }
-        public void KeyIntoBAO(string keyData)
+        public void KeyIntoBAO(string keyData)//Writes into the street address field
         {
             BillAddOne.SendKeys(keyData);
         }
-        public void KeyIntoBC(string keyData)
+        public void KeyIntoBC(string keyData)//Writes into the town/city field
         {
             BillCity.SendKeys(keyData);
         }
-        public void KeyIntoBPost(string keyData)
+        public void KeyIntoBPost(string keyData)//Writes into the postcode field
         {
             BillPostcode.SendKeys(keyData);
         }
-        public void KeyIntoBPhone(string keyData)
+        public void KeyIntoBPhone(string keyData)//Writes into the phone field
         {
             BillPhone.SendKeys(keyData);
         }
-        public void ClickCheckPayment()
+        public void ClickCheckPayment()//Clicks the check payment for payment option
         {
             CheckPaymentButton.Click();
         }
-        public void ClickPlaceOrder()
+        public void ClickPlaceOrder()//Clicks the place order button
         {
             PlaceOrderButton.Click();
         }
-        public string GetOrderNumber()
+        public string GetOrderNumber()//Returns the order number
         {
             return driver.FindElement(By.CssSelector("li[class='woocommerce-order-overview__order order'] strong")).Text;
         }
-        public void ClickMyAccountLink()
-        {
-            MyAccountLink.Click();
-        }
 
         //Advanced functions for 'Checkout' page
-        public void EnterFullBilling()
+        public void EnterFullBilling()//Enters these preset billing details
         {
             KeyIntoFNF("John");
             KeyIntoLNF("Nameson");
@@ -82,7 +73,7 @@ namespace FullProject.POMs
             KeyIntoBPhone("01234567890");
         }
 
-        public void ClearFullBilling()
+        public void ClearFullBilling()//Clears any prexisting billing details
         {
             FirstNameField.Clear();
             LastNameField.Clear();
@@ -91,7 +82,7 @@ namespace FullProject.POMs
             BillPostcode.Clear();
             BillPhone.Clear();
         }
-        public void WaitForOrderNum()
+        public void WaitForOrderNum()//Waits for the order number to appear
         {
             WaitForElementPresent(driver, By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"));
         }

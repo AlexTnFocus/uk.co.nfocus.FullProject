@@ -1,12 +1,4 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static OpenQA.Selenium.BiDi.Modules.Script.RealmInfo;
-using static uk.co.nfocus.FullProject.Utilities.HelperLib;
 
 namespace FullProject.POMs
 {
@@ -28,29 +20,27 @@ namespace FullProject.POMs
         public IWebElement Blog => driver.FindElement(By.CssSelector("li[id='menu-item-47'] a"));
 
         //Functions for the 'Naviagtion' page
-        public void GoHome()
+        public void GoHome()//Navigates to the home page
         {
             Home.Click();
         }
-        public void GoShop()
+        public void GoShop()//Navigates to the shop page
         {
             Shop.Click();
         }
-        public void GoCart()
+        public void GoCart()//Navigates to the cart page
         {
             Cart.Click();
         }
-        public void GoCheckout()
+        public void GoCheckout()//Navigates to the checkout page
         {
             Checkout.Click();
         }
-        public void GoMyAccount()
+        public void GoMyAccount()//Navigates to the my account page
         {
-            
-            //WaitForElementClickable(driver, By.CssSelector("li[id='menu-item-46'] a"));
             MyAccount.Click();
         }
-        public void GoBlog()
+        public void GoBlog()//Navigates to the blog page
         {
             Blog.Click();
         }

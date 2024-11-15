@@ -28,28 +28,28 @@ namespace FullProject.POMs
         {
             CouponButton.Click();
         }
-        public string GetSubtotal() //add element locator up top, remove £ here
+        public string GetSubtotal()//Gets the subtotal and removes the £ sign for calculation purposes
         {
             return driver.FindElement(By.CssSelector("tr[class='cart-subtotal'] bdi:nth-child(1)")).Text.Remove(0,1);
             
         }
-        public string GetDiscount()
+        public string GetDiscount(string coupon)//Gets the price removed by the coupon, and removes the £ sign
         {
-            return driver.FindElement(By.CssSelector("td[data-title='Coupon: edgewords'] span[class='woocommerce-Price-amount amount']")).Text.Remove(0,1);
+            return driver.FindElement(By.CssSelector($"td[data-title='Coupon: {coupon}'] span[class='woocommerce-Price-amount amount']")).Text.Remove(0,1);
         }
-        public string GetShipping()
+        public string GetShipping()//Gets the shipping price and removes the £ sign
         {
             return driver.FindElement(By.CssSelector("tr[class='woocommerce-shipping-totals shipping'] bdi:nth-child(1)")).Text.Remove(0, 1);
         }
-        public string GetTotal()
+        public string GetTotal()//Gets the total price and removes the £ sign
         {
             return driver.FindElement(By.CssSelector("tr[class='order-total'] bdi:nth-child(1)")).Text.Remove(0, 1);
         }
-        public void WaitForProperTotal()
+        public void WaitForProperTotal()//Waits for the total to update after the coupon is applied
         {
-            WaitForElementPresent(driver, By.CssSelector("tr[class='cart-discount coupon-edgewords'] th"));
+            WaitForElementPresent(driver, By.CssSelector(".woocommerce-remove-coupon"));
         }
-        public void ResetCoupon()
+        public void ResetCoupon(string coupon)//Removes any previously applied coupons
         {
             try
             {
@@ -57,7 +57,7 @@ namespace FullProject.POMs
                 driver.FindElement(By.CssSelector(".woocommerce-remove-coupon")).Click();
                 WaitForElementEquals(driver, By.CssSelector("div[role='alert']"), "Coupon has been removed.");
                 Console.WriteLine("Removed previously entered coupon");
-                WaitForElementNotPresent(driver, By.CssSelector("tr[class='cart-discount coupon-edgewords'] th"));
+                WaitForElementNotPresent(driver, By.CssSelector($"tr[class='cart-discount coupon-{coupon}'] th"));
 
             }catch (NoSuchElementException e)
             {

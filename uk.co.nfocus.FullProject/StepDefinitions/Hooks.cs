@@ -1,20 +1,8 @@
 ﻿using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FullProject.POMs;
-using System.Security.Cryptography.X509Certificates;
-using System.Runtime.CompilerServices;
 using OpenQA.Selenium.Interactions;
-using static OpenQA.Selenium.BiDi.Modules.Script.RealmInfo;
-using ServiceStack;
-using static uk.co.nfocus.FullProject.Utilities.HelperLib;
-using System.Drawing;
+
 
 namespace uk.co.nfocus.FullProject.StepDefinitions
 {
@@ -29,34 +17,29 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         public static void SetUp()
         {
             ChromeOptions options = new ChromeOptions();
-            options.AddArgument("--start-maximized");
-            driver = new ChromeDriver(options);
+            options.AddArgument("--start-maximized");//Opens the webpage fullscreen
+            driver = new ChromeDriver(options);//Creates the driver
 
             //Creates a folder for the screenshots
-            string basePath = @"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots";
+            string basePath = @"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots";//Will need changing, look into getContext
             string folderName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"); // Format: YYYY-MM-DD_HH-MM-SS
             string fullPath = Path.Combine(basePath, folderName);
-            Directory.CreateDirectory(fullPath);
+            Directory.CreateDirectory(fullPath);//Creates the folder for saving screenshots in
         }
         [After] //Similar to NUnit [TearDown]
         public static void TearDown()
         {
             Console.WriteLine("Test objective complete, logging out");
-            Thread.Sleep(500);
+            Thread.Sleep(500);//Needs changing, however is necessary for certain execution of TC1
             NavigationPage NavigationPage = new NavigationPage(driver);
             Actions Actions = new Actions(driver);
-            Actions.MoveToElement(NavigationPage.MyAccount);
-            
-
-            //ScrollToTop(driver);
-
-            //ScrollToTop(driver);
+            Actions.MoveToElement(NavigationPage.MyAccount);//Moves focus to the My Account button 
             NavigationPage.GoMyAccount();//Watch this closely, has failed to execute before
             MyAccountPage MyAccountPage = new MyAccountPage(driver);
             Console.WriteLine("Navigated to My Account");          
-            MyAccountPage.ClickLogout();
+            MyAccountPage.ClickLogout();//Clicks the logout button
             Console.WriteLine("Logged out");
-            driver.Quit();
+            driver.Quit();//Closes the driver 
         }
     }
 }

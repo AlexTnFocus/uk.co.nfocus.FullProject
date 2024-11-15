@@ -26,4 +26,10 @@
     <Folder Include="Support\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Features\ShopManagmentExtras.Feature.cs">
+      <DependentUpon>ShopManagmentExtras.feature</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

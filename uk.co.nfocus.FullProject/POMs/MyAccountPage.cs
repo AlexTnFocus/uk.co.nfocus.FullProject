@@ -29,38 +29,34 @@ namespace FullProject.POMs
 
         //Procedures for the 'My Account' Page
 
-        public void KeyIntoUsername(string keyData)
+        public void KeyIntoUsername(string keyData)//Writes into the username field
         {
             UsernameField.Clear();
             UsernameField.SendKeys(keyData);
         }
 
-        public void KeyIntoPassword(string keyData)
+        public void KeyIntoPassword(string keyData)//Writes into the password field
         {
             PasswordField.Clear();
             PasswordField.SendKeys(keyData);
         }
 
-        public void ClickLogin()
+        public void ClickLogin()//Clicks the login button
         {
             LoginButton.Click();
         }
-        public void ClickShopLink()
-        {
-            ShopLink.Click();
-        }
-        public void ClickLogout()
+        public void ClickLogout()//Clicks the logout button
         {
             LogoutButton.Click();
         }
-        public void ClickOrderLink()
+        public void ClickOrderLink()//Clicks the order link
         {
             OrderLink.Click();
         }
 
         //Advanced functions for 'MyAccount' page
 
-        public void CompleteLogin(string username, string password)
+        public void CompleteLogin(string username, string password)//Performs a full login
         {
             KeyIntoUsername(username);
             KeyIntoPassword(password);

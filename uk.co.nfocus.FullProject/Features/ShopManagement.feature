@@ -20,3 +20,6 @@ Scenario: Place an order
 	And Placed the order
 	When I go to my-account/orders
 	Then The order number from the checkout should be listed
+
+#@Core tag is used to indicate these tests were designed first and test what is desired
+#only as much as needed, other tests test more
