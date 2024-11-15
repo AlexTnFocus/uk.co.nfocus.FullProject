@@ -9,12 +9,19 @@ using System.Text;
 using System.Threading.Tasks;
 using FullProject.POMs;
 using System.Security.Cryptography.X509Certificates;
+using System.Runtime.CompilerServices;
+using OpenQA.Selenium.Interactions;
+using static OpenQA.Selenium.BiDi.Modules.Script.RealmInfo;
+using ServiceStack;
+using static uk.co.nfocus.FullProject.Utilities.HelperLib;
+using System.Drawing;
 
 namespace uk.co.nfocus.FullProject.StepDefinitions
 {
     [Binding]
     public partial class Hooks
     {
+        public string filePath;
 
         public static IWebDriver driver; //field to share driver between class methods
 
@@ -34,11 +41,19 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         [After] //Similar to NUnit [TearDown]
         public static void TearDown()
         {
-            NavigationPage NavigationPage = new NavigationPage(driver);
-            MyAccountPage MyAccountPage = new MyAccountPage(driver);
             Console.WriteLine("Test objective complete, logging out");
-            NavigationPage.GoMyAccount();
-            Console.WriteLine("Navigated to My Account");
+            Thread.Sleep(500);
+            NavigationPage NavigationPage = new NavigationPage(driver);
+            Actions Actions = new Actions(driver);
+            Actions.MoveToElement(NavigationPage.MyAccount);
+            
+
+            //ScrollToTop(driver);
+
+            //ScrollToTop(driver);
+            NavigationPage.GoMyAccount();//Watch this closely, has failed to execute before
+            MyAccountPage MyAccountPage = new MyAccountPage(driver);
+            Console.WriteLine("Navigated to My Account");          
             MyAccountPage.ClickLogout();
             Console.WriteLine("Logged out");
             driver.Quit();

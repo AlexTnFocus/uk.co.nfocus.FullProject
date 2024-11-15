@@ -1,18 +1,20 @@
 ﻿Feature: ShopManagement
 
-A short summary of the feature
+The user wants to be able to add items to their cart, apply coupons and place an order,
+with the order being recorded and visible on their account.
 
 Background: 
 Given I am logged in to my account using 'magmortar@pmail.com' and 'octoberComic0n!?'
 And I have an item 'Belt' in my cart
-#Possible to use Examples to test with adding different items to the cart
 
+@Core
 Scenario: Apply a coupon
 	Given I am looking at the cart contents
-	When I apply the coupon edgewords
+	When I apply the coupon 'edgewords'
 	Then The coupon should take 15% off the price
 	And The total after shipping should be correct
 
+@Core
 Scenario: Place an order
 	Given I have proceeded to the checkout
 	And Placed the order

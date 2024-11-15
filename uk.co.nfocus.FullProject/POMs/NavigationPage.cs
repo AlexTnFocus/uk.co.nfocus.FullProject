@@ -1,9 +1,12 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static OpenQA.Selenium.BiDi.Modules.Script.RealmInfo;
+using static uk.co.nfocus.FullProject.Utilities.HelperLib;
 
 namespace FullProject.POMs
 {
@@ -22,7 +25,7 @@ namespace FullProject.POMs
         public IWebElement Cart => driver.FindElement(By.CssSelector("li[id='menu-item-44'] a"));
         public IWebElement Checkout => driver.FindElement(By.CssSelector("li[id='menu-item-45'] a"));
         public IWebElement MyAccount => driver.FindElement(By.CssSelector("li[id='menu-item-46'] a"));
-        public IWebElement Blog => driver.FindElement(By.CssSelector("li[id='menu-item-46'] a"));
+        public IWebElement Blog => driver.FindElement(By.CssSelector("li[id='menu-item-47'] a"));
 
         //Functions for the 'Naviagtion' page
         public void GoHome()
@@ -43,6 +46,8 @@ namespace FullProject.POMs
         }
         public void GoMyAccount()
         {
+            
+            //WaitForElementClickable(driver, By.CssSelector("li[id='menu-item-46'] a"));
             MyAccount.Click();
         }
         public void GoBlog()
