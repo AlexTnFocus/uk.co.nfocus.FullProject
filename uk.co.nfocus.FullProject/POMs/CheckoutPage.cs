@@ -23,29 +23,28 @@ namespace FullProject.POMs
         public IWebElement PlaceOrderButton => driver.FindElement(By.CssSelector("#place_order"));
         public IWebElement MyAccountLink => driver.FindElement(By.CssSelector("li[id='menu-item-46'] a"));
         public IWebElement CheckoutOrderNum => driver.FindElement(By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"));
-        public IWebElement OrderNumber => driver.FindElement(By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"));
         //Functions for the 'Checkout' page
-        public void KeyIntoFNF(string keyData)//Writes into the first name field
+        public void KeyIntoFirstNameField(string keyData)//Writes into the first name field
         {
             FirstNameField.SendKeys(keyData);
         }
-        public void KeyIntoLNF(string keyData)//Writes into the last name field
+        public void KeyIntoLastNameField(string keyData)//Writes into the last name field
         {
             LastNameField.SendKeys(keyData);
         }
-        public void KeyIntoBAO(string keyData)//Writes into the street address field
+        public void KeyIntoBillAddrOne(string keyData)//Writes into the street address field
         {
             BillAddOne.SendKeys(keyData);
         }
-        public void KeyIntoBC(string keyData)//Writes into the town/city field
+        public void KeyIntoBillCity(string keyData)//Writes into the town/city field
         {
             BillCity.SendKeys(keyData);
         }
-        public void KeyIntoBPost(string keyData)//Writes into the postcode field
+        public void KeyIntoBillPostcode(string keyData)//Writes into the postcode field
         {
             BillPostcode.SendKeys(keyData);
         }
-        public void KeyIntoBPhone(string keyData)//Writes into the phone field
+        public void KeyIntoBillPhone(string keyData)//Writes into the phone field
         {
             BillPhone.SendKeys(keyData);
         }
@@ -57,20 +56,16 @@ namespace FullProject.POMs
         {
             PlaceOrderButton.Click();
         }
-        public string GetOrderNumber()//Returns the order number
-        {
-            return OrderNumber.Text;
-        }
 
         //Advanced functions for 'Checkout' page
         public void EnterFullBilling()//Enters these preset billing details
         {
-            KeyIntoFNF("John");
-            KeyIntoLNF("Nameson");
-            KeyIntoBAO("1 Streetsville");
-            KeyIntoBC("Citytown");
-            KeyIntoBPost("SA44 4NE");
-            KeyIntoBPhone("01234567890");
+            KeyIntoFirstNameField("John");
+            KeyIntoLastNameField("Nameson");
+            KeyIntoBillAddrOne("1 Streetsville");
+            KeyIntoBillCity("Citytown");
+            KeyIntoBillPostcode("SA44 4NE");
+            KeyIntoBillPhone("01234567890");
         }
 
         public void ClearFullBilling()//Clears any prexisting billing details
@@ -82,10 +77,7 @@ namespace FullProject.POMs
             BillPostcode.Clear();
             BillPhone.Clear();
         }
-        public void WaitForOrderNum()//Waits for the order number to appear
-        {
-            WaitForElementPresent(driver, By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"));
-        }
+        
 
     }
 }

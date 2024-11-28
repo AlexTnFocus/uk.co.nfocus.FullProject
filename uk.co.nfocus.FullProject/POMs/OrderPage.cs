@@ -17,7 +17,6 @@ namespace FullProject.POMs
         }
 
         //Locators for elements on the 'Order' page
-        public IWebElement MyAccountLink => driver.FindElement(By.CssSelector("li[id='menu-item-46'] a"));
         public IWebElement TopOrderNum => driver.FindElement(By.CssSelector("tbody tr:nth-child(1) td:nth-child(1) a:nth-child(1)"));
         
         //Functions for the 'Order' page

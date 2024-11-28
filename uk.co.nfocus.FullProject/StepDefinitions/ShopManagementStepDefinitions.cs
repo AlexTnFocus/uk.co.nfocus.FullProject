@@ -45,7 +45,7 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         }
 
         [Given(@"I am logged in to my account using '([^']*)' and '([^']*)'")]
-        public void GivenIAmLoggedInToMyAccountUsingAnd(string username, string password)
+        public void GivenIAmLoggedInToMyAccount(string username, string password)
         {
             MyAccountPage MyAccountPage = new MyAccountPage(_driver);
             MyAccountPage.CompleteLogin(username, password);
@@ -85,7 +85,7 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         public string Coupon;//Used so the coupon used can be passed between multiple steps
 
         [When(@"I apply the coupon '([^']*)'")]
-        public void WhenIApplyTheCoupon(string coupon) 
+        public void WhenIApplyACoupon(string coupon) 
         {
             Coupon = coupon;
             CartPage CartPage = new CartPage(_driver);
@@ -97,7 +97,7 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         }//Enters the coupon based on what is passed through from gherkin
 
         [Then(@"The coupon should take (.*)% off the price")]
-        public void ThenTheCouponShouldTakeOffThePrice(int discountPer)
+        public void ThenTheCouponShouldDiscount(int discountPer)
         {
             CartPage CartPage = new CartPage(_driver);
             CartPage.WaitForProperTotal();
@@ -145,7 +145,7 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         public string OrderNumber;//Used to pass the ordernumber from placing the order between steps
 
         [Given(@"Placed the order")]
-        public void GivenPlacedTheOrder()
+        public void GivenIHavePlacedTheOrder()
         {
             CheckoutPage CheckoutPage = new CheckoutPage(_driver);
             CheckoutPage.ClearFullBilling();//Clears the fields first as they can save old billing details
@@ -155,15 +155,16 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
             Console.WriteLine("Clicked 'Check Payment'");
             CheckoutPage.ClickPlaceOrder();
             Console.WriteLine("Placed order");
-            CheckoutPage.WaitForOrderNum();//Waits for the order number to appear
-            OrderNumber = CheckoutPage.GetOrderNumber();
+            OrderRecievedPage OrderRecievedPage = new OrderRecievedPage(_driver);
+            OrderRecievedPage.WaitForOrderNum();//Waits for the order number to appear
+            OrderNumber = OrderRecievedPage.GetOrderNumber();
             Console.WriteLine($"Collected resulting order number {OrderNumber}");
             TakeScreenshot(_driver, "TC2-1CheckoutOrderNum.png", GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\"));
             TestContext.AddTestAttachment(GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\") + @"\TC2-1CheckoutOrderNum.png", "TC2-1");
         }
 
         [When(@"I navigate to the orders page")]
-        public void WhenIGoToMy_AccountOrders()
+        public void WhenIGoToTheOrdersPage()
         {
             NavigationPage NavigationPage = new NavigationPage(_driver);
             MyAccountPage MyAccountPage = new MyAccountPage(_driver);
@@ -174,7 +175,7 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         }//Navigates to the order page
 
         [Then(@"The order number from the checkout should be listed")]
-        public void ThenTheOrderNumberFromTheCheckoutShouldBeListed()
+        public void ThenTheOrderNumberFromCheckoutShouldBeListed()
         {
             OrderPage OrderPage = new OrderPage(_driver);
             TakeScreenshot(_driver, "TC2-2OrdersOrderNum.png", GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\"));

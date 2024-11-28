@@ -65,7 +65,9 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
             try
             {
                 Console.WriteLine("Test objective complete, logging out");
-                Thread.Sleep(500);//Needs changing, however is necessary for certain execution of TC1
+                Thread.Sleep(500);//Needs changing, however is necessary in case the cart is empty.
+                                  //Some unseen and unknown load happens that takes time but
+                                  //must be wait out for execution to continue properly
                 NavigationPage NavigationPage = new NavigationPage(_driver);
                 NavigationPage.GoMyAccount();//Watch this closely, has failed to execute before
                 MyAccountPage MyAccountPage = new MyAccountPage(_driver);
