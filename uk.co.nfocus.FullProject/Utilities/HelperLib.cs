@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using FullProject.POMs;
+using NUnit.Framework.Interfaces;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
 namespace uk.co.nfocus.FullProject.Utilities
@@ -60,6 +62,34 @@ namespace uk.co.nfocus.FullProject.Utilities
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             js.ExecuteScript("window.scrollTo(0, 0);");
         }//Scrolls to the top of the webpage
+        public static decimal CalculateActualDiscount(string _subtotal, string _discount)
+        {
+            return (Decimal.Divide((Decimal.Parse(_subtotal) - Decimal.Parse(_discount)), Decimal.Parse(_subtotal)));
+        }
+        public static decimal CalculateTotal(string _subtotal, string _discount, string _shipping)
+        {
+            return Decimal.Parse(_subtotal) - Decimal.Parse(_discount) + Decimal.Parse(_shipping);
+        }
+        public static void ClearAndEnter(IWebElement _field, string _keyData)
+        {
+            _field.Clear();
+            _field.SendKeys(_keyData);
+        }
+        public static void TakeScreenshot(IWebDriver driver, string screenshotName, string ssPath)
+        {
+            ITakesScreenshot ssdriver = driver as ITakesScreenshot;
+            Screenshot screenshot = ssdriver.GetScreenshot();
+
+            string fullFilePath = Path.Combine(ssPath, screenshotName);
+            screenshot.SaveAsFile(fullFilePath);
+        }//Used to take screenshots to collect evidence
+        public static void ClearBasketContents(IWebDriver driver)
+        {
+            NavigationPage NavigationPage = new NavigationPage(driver);
+            NavigationPage.GoCart();
+            CartPage CartPage = new CartPage(driver);
+            CartPage.ResetCart();
+        }
 
     }
 }

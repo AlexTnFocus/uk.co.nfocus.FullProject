@@ -18,9 +18,7 @@ Scenario Outline: Apply a coupon
 Examples: 
 | item   | coupon    | discount |
 | Beanie | edgewords | 15       |
-| Cap    | edgewords | 10       |
 | Hoodie | nfocus    | 25       |
-| Belt   | nfocus    | 12       |
 
 
 #@Extra

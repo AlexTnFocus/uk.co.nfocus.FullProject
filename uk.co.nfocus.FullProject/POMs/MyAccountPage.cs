@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static uk.co.nfocus.FullProject.Utilities.HelperLib;
 
 namespace FullProject.POMs
 {
@@ -26,21 +27,7 @@ namespace FullProject.POMs
         public IWebElement LogoutButton => driver.FindElement(By.CssSelector("li[class='woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--customer-logout'] a"));
         public IWebElement OrderLink => driver.FindElement(By.CssSelector("li[class='woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders'] a"));
 
-
         //Procedures for the 'My Account' Page
-
-        public void KeyIntoUsername(string keyData)//Writes into the username field
-        {
-            UsernameField.Clear();
-            UsernameField.SendKeys(keyData);
-        }
-
-        public void KeyIntoPassword(string keyData)//Writes into the password field
-        {
-            PasswordField.Clear();
-            PasswordField.SendKeys(keyData);
-        }
-
         public void ClickLogin()//Clicks the login button
         {
             LoginButton.Click();
@@ -58,8 +45,8 @@ namespace FullProject.POMs
 
         public void CompleteLogin(string username, string password)//Performs a full login
         {
-            KeyIntoUsername(username);
-            KeyIntoPassword(password);
+            ClearAndEnter(UsernameField, username);
+            ClearAndEnter(PasswordField, password);
             LoginButton.Click();
         }
     }

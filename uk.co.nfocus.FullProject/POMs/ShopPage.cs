@@ -16,7 +16,7 @@ namespace FullProject.POMs
 
         //Locators for elements on the 'Shop' Page
         public IWebElement InitialCartContents => driver.FindElement(By.CssSelector("a[title='View your shopping cart'] span[class='count']"));
-
+        public IWebElement CartContents => driver.FindElement(By.CssSelector("a[title='View your shopping cart'] span[class='count']"));
 
         //Procedures for the 'Shop' Page
         public void AddItemToCart(string itemName)//Adds an item to the cart via linkText
@@ -26,11 +26,11 @@ namespace FullProject.POMs
         }
         public string GetCartContents()//Fetches the number of items currently in the cart
         {
-            return driver.FindElement(By.CssSelector("a[title='View your shopping cart'] span[class='count']")).Text;
+            return CartContents.Text;
         }
-        public void WaitForCartUpdate(string CC)//Waits for the cart to update
+        public void WaitForCartUpdate(string _cartContents)//Waits for the cart to update
         {
-            WaitForElementNotEquals(driver, By.CssSelector("a[title='View your shopping cart'] span[class='count']"), CC);
+            WaitForElementNotEquals(driver, By.CssSelector("a[title='View your shopping cart'] span[class='count']"), _cartContents);
         }
 
 

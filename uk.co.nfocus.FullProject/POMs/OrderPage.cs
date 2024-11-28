@@ -18,12 +18,13 @@ namespace FullProject.POMs
 
         //Locators for elements on the 'Order' page
         public IWebElement MyAccountLink => driver.FindElement(By.CssSelector("li[id='menu-item-46'] a"));
-
+        public IWebElement TopOrderNum => driver.FindElement(By.CssSelector("tbody tr:nth-child(1) td:nth-child(1) a:nth-child(1)"));
+        
         //Functions for the 'Order' page
         public string GetTopOrderNum()//Gets the most recent order
         {
-            var TopOrderNum = driver.FindElement(By.CssSelector("tbody tr:nth-child(1) td:nth-child(1) a:nth-child(1)")).Text;
-            return TopOrderNum.Remove(0, 1);
+            var _topOrderNum = TopOrderNum.Text;
+            return _topOrderNum.Remove(0, 1);
         }
 
     }

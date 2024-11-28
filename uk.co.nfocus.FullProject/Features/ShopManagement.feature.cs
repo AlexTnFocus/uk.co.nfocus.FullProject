@@ -82,7 +82,7 @@ namespace uk.co.nfocus.FullProject.Features
 testRunner.Given("I am logged in to my account using \'magmortar@pmail.com\' and \'octoberComic0n!?\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 8
-testRunner.And("I have an item \'Belt\' in my cart", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+testRunner.And("I have added an item \'Belt\' to my cart", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
         }
         
@@ -153,7 +153,7 @@ this.FeatureBackground();
  testRunner.And("Placed the order", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 21
- testRunner.When("I go to my-account/orders", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I navigate to the orders page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 22
  testRunner.Then("The order number from the checkout should be listed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

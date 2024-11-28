@@ -9,6 +9,9 @@ using System.Security.Cryptography.X509Certificates;
 using FullProject.POMs;
 using static OpenQA.Selenium.Screenshot;
 using static uk.co.nfocus.FullProject.Utilities.HelperLib;
+using OpenQA.Selenium.DevTools.V128.Network;
+using static System.Net.WebRequestMethods;
+using Nfocus7Specflow.Support;
 
 /*
 Reporting:
@@ -25,23 +28,44 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
     [Binding]
     public class ShopManagementStepDefinitions
     {
+        private string couponPriv;
+        private string orderNumberPriv;
+        private string usernamePriv;
+        private string passwordPriv;
+
+        private readonly ScenarioContext _scenarioContext;
+        private IWebDriver _driver;
+        private readonly WDWrapper _wdWrapper;
+
+        public ShopManagementStepDefinitions(WDWrapper wdWrapper, ScenarioContext scenarioContext)
+        {
+            _scenarioContext = scenarioContext;
+            _driver = wdWrapper.Driver;
+
+        }
+
         [Given(@"I am logged in to my account using '([^']*)' and '([^']*)'")]
         public void GivenIAmLoggedInToMyAccountUsingAnd(string username, string password)
         {
-            driver.Url = "https://www.edgewordstraining.co.uk/demo-site/my-account/";
-            Console.WriteLine("Launched Website");
-            driver.FindElement(By.LinkText("Dismiss")).Click(); //Dismisses the demo banner as it gets in the way of some button presses
-            Console.WriteLine("Dismissed bottom banner");
-            MyAccountPage MyAccountPage = new MyAccountPage(driver);
+            MyAccountPage MyAccountPage = new MyAccountPage(_driver);
             MyAccountPage.CompleteLogin(username, password);
+            try
+            {
+                Assert.That(MyAccountPage.LogoutButton, Is.Not.Null, "The logout button is not displayed, login failed.");
+            }
+            catch (NoSuchElementException ex)
+            {
+                Assert.Fail($"Logout button could not be accessed, the login attempt failed");
+            }
             Console.WriteLine("Logged in");//consistent reporting helps indicate where failures occur in the report
+            ClearBasketContents(_driver);
         }//Logs the user in
 
-        [Given(@"I have an item '([^']*)' in my cart")]
+        [Given(@"I have added an item '([^']*)' to my cart")]
         public void GivenIHaveAnItemInMyCart(string item)
         {
-            NavigationPage NavigationPage = new NavigationPage(driver);
-            ShopPage ShopPage = new ShopPage(driver);
+            NavigationPage NavigationPage = new NavigationPage(_driver);
+            ShopPage ShopPage = new ShopPage(_driver);
             NavigationPage.GoShop();
             Console.WriteLine("Navigated to shop page");
             string CurrentCart = ShopPage.GetCartContents();//Gets the number of items in the cart before another is added here
@@ -53,7 +77,7 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         [Given(@"I am looking at the cart contents")]
         public void GivenIAmLookingAtTheCartContents()
         {
-            NavigationPage NavigationPage = new NavigationPage(driver);
+            NavigationPage NavigationPage = new NavigationPage(_driver);
             NavigationPage.GoCart();
             Console.WriteLine("Navigated to cart page");
         }//Navigates to the cart, which thanks to the waits earlier has the item that was added, in the cart
@@ -61,10 +85,10 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         public string Coupon;//Used so the coupon used can be passed between multiple steps
 
         [When(@"I apply the coupon '([^']*)'")]
-        public void WhenIApplyTheCoupon(string coupon)
+        public void WhenIApplyTheCoupon(string coupon) 
         {
             Coupon = coupon;
-            CartPage CartPage = new CartPage(driver);
+            CartPage CartPage = new CartPage(_driver);
             CartPage.ResetCoupon(coupon);
             CartPage.KeyIntoCoupon(coupon);
             Console.WriteLine($"Typed in the coupon {Coupon}");//Writes in the report of the coupon used
@@ -75,48 +99,45 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         [Then(@"The coupon should take (.*)% off the price")]
         public void ThenTheCouponShouldTakeOffThePrice(int discountPer)
         {
-            CartPage CartPage = new CartPage(driver);
+            CartPage CartPage = new CartPage(_driver);
             CartPage.WaitForProperTotal();
-            TakeScreenshot(driver, "TC1-1CouponVals.png", GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\"));
+            TakeScreenshot(_driver, "TC1-1CouponVals.png", GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\"));
             //Takes a screenshot before the assertion so evidence is always availible
             TestContext.AddTestAttachment(GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\") + @"\TC1-1CouponVals.png", "TC1-1");
             //Saves the screenshot in the folder created in the setup
-            double discountReverse = 1-((double)discountPer / 100);
+            decimal discountReverse = Decimal.Divide(discountPer, 100);
             //Used so the assertion is easier to read
-            decimal discountActual = (Decimal.Divide((Decimal.Parse(CartPage.GetSubtotal()) - Decimal.Parse(CartPage.GetDiscount(Coupon))), Decimal.Parse(CartPage.GetSubtotal())));
+            decimal discountActual = 1 - CalculateActualDiscount(CartPage.GetSubtotal(), CartPage.GetDiscount(Coupon));
             //Calculates the actual discount, decimals are used because exact values are important here and money calculations are involved
-            Console.WriteLine(discountReverse);
             Assert.That(discountActual, Is.EqualTo(discountReverse),
-                $"Discount is not valid for {discountPer}% off, it is valid for {(1 - discountActual)*100}% off");
+                $"Discount is not valid for {discountPer}% off, it is valid for {discountActual*100}% off");
             //Asserts whether the coupon is valid for the expected amount
-            Console.WriteLine(CartPage.GetSubtotal().ToString());
-            Console.WriteLine(CartPage.GetDiscount(Coupon).ToString());
+            Console.WriteLine($"The coupon {Coupon} is valid for {discountActual*100}% off");
         }
 
         [Then(@"The total after shipping should be correct")]
         public void ThenTheTotalAfterShippingShouldBeCorrect()
         {
-            CartPage CartPage = new CartPage(driver);
+            CartPage CartPage = new CartPage(_driver);
             Console.WriteLine($"The listed Total is {CartPage.GetTotal()}");
             Console.WriteLine($"The Subtotal is {CartPage.GetSubtotal()}");
             Console.WriteLine($"The Shipping is {CartPage.GetShipping()}");
-            Console.WriteLine($"The Discount is {CartPage.GetDiscount(Coupon)}");
+            Console.WriteLine($"The Amount removed by the Discount is {CartPage.GetDiscount(Coupon)}");
             //Writes all these values to the report
-            TakeScreenshot(driver, "TC1-2TotalShipping.png", GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\"));
+            TakeScreenshot(_driver, "TC1-2TotalShipping.png", GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\"));
             TestContext.AddTestAttachment(GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\") + @"\TC1-2TotalShipping.png", "TC1-2");
-            Assert.That(Decimal.Parse(CartPage.GetSubtotal()) -
-                Decimal.Parse(CartPage.GetDiscount(Coupon))
-                + Decimal.Parse(CartPage.GetShipping()),
-                Is.EqualTo(Decimal.Parse(CartPage.GetTotal())),
-                "Error, total after shipping is incorrect");
+            decimal calculatedTotal = CalculateTotal(CartPage.GetSubtotal(), CartPage.GetDiscount(Coupon), CartPage.GetShipping());
+            Assert.That(calculatedTotal, Is.EqualTo(Decimal.Parse(CartPage.GetTotal())),
+                $"Error, total after shipping is {calculatedTotal}, not {Decimal.Parse(CartPage.GetTotal())}");
             //Asserts the values presented produce the same result as the proposed one
-            Console.WriteLine("The total after shipping is calculated correctly");
+            Console.WriteLine($"The total after shipping is calculated correctly," +
+                $" the listed total is {CartPage.GetTotal()} and the actual total is {calculatedTotal}");
         }
 
         [Given(@"I have proceeded to the checkout")]
         public void GivenIHaveProceededToTheCheckout()
         {
-            NavigationPage NavigationPage = new NavigationPage(driver);
+            NavigationPage NavigationPage = new NavigationPage(_driver);
             NavigationPage.GoCheckout();
             Console.WriteLine("Navigated to checkout");
         }//Navigates to checkout
@@ -126,7 +147,7 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         [Given(@"Placed the order")]
         public void GivenPlacedTheOrder()
         {
-            CheckoutPage CheckoutPage = new CheckoutPage(driver);
+            CheckoutPage CheckoutPage = new CheckoutPage(_driver);
             CheckoutPage.ClearFullBilling();//Clears the fields first as they can save old billing details
             CheckoutPage.EnterFullBilling();//Enters billing details a la the EnterFullBilling function
             Console.WriteLine("Cleared existing billing and entered new details");
@@ -137,15 +158,15 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
             CheckoutPage.WaitForOrderNum();//Waits for the order number to appear
             OrderNumber = CheckoutPage.GetOrderNumber();
             Console.WriteLine($"Collected resulting order number {OrderNumber}");
-            TakeScreenshot(driver, "TC2-1CheckoutOrderNum.png", GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\"));
+            TakeScreenshot(_driver, "TC2-1CheckoutOrderNum.png", GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\"));
             TestContext.AddTestAttachment(GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\") + @"\TC2-1CheckoutOrderNum.png", "TC2-1");
         }
 
-        [When(@"I go to my-account/orders")]
+        [When(@"I navigate to the orders page")]
         public void WhenIGoToMy_AccountOrders()
         {
-            NavigationPage NavigationPage = new NavigationPage(driver);
-            MyAccountPage MyAccountPage = new MyAccountPage(driver);
+            NavigationPage NavigationPage = new NavigationPage(_driver);
+            MyAccountPage MyAccountPage = new MyAccountPage(_driver);
             NavigationPage.GoMyAccount();
             Console.WriteLine("Navigated to My Account");
             MyAccountPage.ClickOrderLink();
@@ -155,19 +176,13 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
         [Then(@"The order number from the checkout should be listed")]
         public void ThenTheOrderNumberFromTheCheckoutShouldBeListed()
         {
-            OrderPage OrderPage = new OrderPage(driver);
-            TakeScreenshot(driver, "TC2-2OrdersOrderNum.png", GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\"));
+            OrderPage OrderPage = new OrderPage(_driver);
+            TakeScreenshot(_driver, "TC2-2OrdersOrderNum.png", GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\"));
             TestContext.AddTestAttachment(GetMostRecentFolder(@"C:\Users\AlexTongue\OneDrive - nFocus Limited\Pictures\Test Screenshots\") + @"\TC2-2OrdersOrderNum.png", "TC2-2");
+            Console.WriteLine($"The most recent order number is {OrderPage.GetTopOrderNum()}");
             Assert.That(OrderNumber, Is.EqualTo(OrderPage.GetTopOrderNum()), "Order numbers do not match");
             Console.WriteLine($"Confirmed order numbers {OrderNumber} and {OrderPage.GetTopOrderNum()} match");
         }//Confirms the order numbers match
-        public void TakeScreenshot(IWebDriver driver, string screenshotName, string ssPath)
-        {
-            ITakesScreenshot ssdriver = driver as ITakesScreenshot;
-            Screenshot screenshot = ssdriver.GetScreenshot();
-
-            string fullFilePath = Path.Combine(ssPath, screenshotName);
-            screenshot.SaveAsFile(fullFilePath);
-        }//Used to take screenshots to collect evidence
+        
     }
 }

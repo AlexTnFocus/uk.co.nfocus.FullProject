@@ -23,7 +23,7 @@ namespace FullProject.POMs
         public IWebElement PlaceOrderButton => driver.FindElement(By.CssSelector("#place_order"));
         public IWebElement MyAccountLink => driver.FindElement(By.CssSelector("li[id='menu-item-46'] a"));
         public IWebElement CheckoutOrderNum => driver.FindElement(By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"));
-
+        public IWebElement OrderNumber => driver.FindElement(By.CssSelector("li[class='woocommerce-order-overview__order order'] strong"));
         //Functions for the 'Checkout' page
         public void KeyIntoFNF(string keyData)//Writes into the first name field
         {
@@ -59,7 +59,7 @@ namespace FullProject.POMs
         }
         public string GetOrderNumber()//Returns the order number
         {
-            return driver.FindElement(By.CssSelector("li[class='woocommerce-order-overview__order order'] strong")).Text;
+            return OrderNumber.Text;
         }
 
         //Advanced functions for 'Checkout' page

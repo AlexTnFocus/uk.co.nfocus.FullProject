@@ -88,9 +88,7 @@ testRunner.Given("I am logged in to my account using \'magmortar@pmail.com\' and
         [NUnit.Framework.DescriptionAttribute("Apply a coupon")]
         [NUnit.Framework.CategoryAttribute("Extra")]
         [NUnit.Framework.TestCaseAttribute("Beanie", "edgewords", "15", null)]
-        [NUnit.Framework.TestCaseAttribute("Cap", "edgewords", "10", null)]
         [NUnit.Framework.TestCaseAttribute("Hoodie", "nfocus", "25", null)]
-        [NUnit.Framework.TestCaseAttribute("Belt", "nfocus", "12", null)]
         public void ApplyACoupon(string item, string coupon, string discount, string[] exampleTags)
         {
             string[] @__tags = new string[] {

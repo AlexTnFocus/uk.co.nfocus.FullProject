@@ -18,6 +18,7 @@ namespace FullProject.POMs
         public IWebElement Checkout => driver.FindElement(By.CssSelector("li[id='menu-item-45'] a"));
         public IWebElement MyAccount => driver.FindElement(By.CssSelector("li[id='menu-item-46'] a"));
         public IWebElement Blog => driver.FindElement(By.CssSelector("li[id='menu-item-47'] a"));
+        public IWebElement DismissButton => driver.FindElement(By.LinkText("Dismiss"));
 
         //Functions for the 'Naviagtion' page
         public void GoHome()//Navigates to the home page
@@ -43,6 +44,10 @@ namespace FullProject.POMs
         public void GoBlog()//Navigates to the blog page
         {
             Blog.Click();
+        }
+        public void ClickDismiss()
+        {
+            DismissButton.Click();
         }
 
     }
