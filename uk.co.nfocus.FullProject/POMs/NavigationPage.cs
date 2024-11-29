@@ -12,12 +12,12 @@ namespace FullProject.POMs
         }
 
         //Locators for the 'Navigation' Page
-        public IWebElement Home => driver.FindElement(By.CssSelector("li[id='menu-item-42'] a"));
-        public IWebElement Shop => driver.FindElement(By.CssSelector("li[id='menu-item-43'] a"));
-        public IWebElement Cart => driver.FindElement(By.CssSelector("li[id='menu-item-44'] a"));
-        public IWebElement Checkout => driver.FindElement(By.CssSelector("li[id='menu-item-45'] a"));
-        public IWebElement MyAccount => driver.FindElement(By.CssSelector("li[id='menu-item-46'] a"));
-        public IWebElement Blog => driver.FindElement(By.CssSelector("li[id='menu-item-47'] a"));
+        public IWebElement Home => driver.FindElement(By.LinkText("Home"));
+        public IWebElement Shop => driver.FindElement(By.LinkText("Shop"));
+        public IWebElement Cart => driver.FindElement(By.LinkText("Cart"));
+        public IWebElement Checkout => driver.FindElement(By.LinkText("Checkout"));
+        public IWebElement MyAccount => driver.FindElement(By.LinkText("My account"));
+        public IWebElement Blog => driver.FindElement(By.LinkText("Blog"));
         public IWebElement DismissButton => driver.FindElement(By.LinkText("Dismiss"));
 
         //Functions for the 'Naviagtion' page

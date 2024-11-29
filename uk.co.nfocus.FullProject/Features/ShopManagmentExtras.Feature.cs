@@ -117,7 +117,7 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 12
- testRunner.Given(string.Format("I have an item \'{0}\' in my cart", item), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given(string.Format("I have added an item \'{0}\' to my cart", item), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 13
  testRunner.And("I am looking at the cart contents", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

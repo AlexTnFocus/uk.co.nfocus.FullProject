@@ -35,7 +35,6 @@ namespace FullProject.POMs
         {
             //return driver.FindElement(By.CssSelector("tr[class='cart-subtotal'] bdi:nth-child(1)")).Text.Remove(0,1);
             return Subtotal.Text.Remove(0, 1);
-
         }
         public string GetDiscount(string coupon)//Gets the price removed by the coupon, and removes the £ sign
         {
@@ -67,7 +66,6 @@ namespace FullProject.POMs
             {
                 Console.WriteLine("No coupon present, removing is unecessary");
             }
-
         }
         public void ResetCart()
         {
@@ -78,6 +76,9 @@ namespace FullProject.POMs
                 ResetCart();
             }
             catch (NoSuchElementException e)
+            {
+                Console.WriteLine("Cart has been cleared");
+            }catch (StaleElementReferenceException e)
             {
                 Console.WriteLine("Cart has been cleared");
             }

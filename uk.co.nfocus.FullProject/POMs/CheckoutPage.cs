@@ -58,26 +58,16 @@ namespace FullProject.POMs
         }
 
         //Advanced functions for 'Checkout' page
-        public void EnterFullBilling()//Enters these preset billing details
+        public void EnterFullBilling(
+            string firstName, string lastName, string streetAddr,
+            string townCity, string postcode, string phone)//Enters these preset billing details
         {
-            KeyIntoFirstNameField("John");
-            KeyIntoLastNameField("Nameson");
-            KeyIntoBillAddrOne("1 Streetsville");
-            KeyIntoBillCity("Citytown");
-            KeyIntoBillPostcode("SA44 4NE");
-            KeyIntoBillPhone("01234567890");
+            ClearAndEnter(FirstNameField, firstName);
+            ClearAndEnter(LastNameField, lastName);
+            ClearAndEnter(BillAddOne, streetAddr);
+            ClearAndEnter(BillCity, townCity);
+            ClearAndEnter(BillPostcode, postcode);
+            ClearAndEnter(BillPhone, phone);
         }
-
-        public void ClearFullBilling()//Clears any prexisting billing details
-        {
-            FirstNameField.Clear();
-            LastNameField.Clear();
-            BillAddOne.Clear();
-            BillCity.Clear();
-            BillPostcode.Clear();
-            BillPhone.Clear();
-        }
-        
-
     }
 }

@@ -44,7 +44,8 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
             string basePath = Path.GetDirectoryName(assemblyPath);
             string folderName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"); // Format: YYYY-MM-DD_HH-MM-SS
             string fullPath = Path.Combine(basePath, folderName);
-            Console.WriteLine(fullPath);
+            Console.WriteLine(basePath);
+            _scenarioContext["basePath"] = basePath;
             Directory.CreateDirectory(fullPath);//Creates the folder for saving screenshots in
             _driver.Url = "https://www.edgewordstraining.co.uk/demo-site/my-account/";
             Console.WriteLine("Launched Website");
@@ -52,11 +53,8 @@ namespace uk.co.nfocus.FullProject.StepDefinitions
             NavigationPage.ClickDismiss(); //Dismisses the demo banner as it gets in the way of some button presses
             Console.WriteLine("Dismissed bottom banner");
 
-            
-            
             _wdWrapper.Driver = _driver;
             _scenarioContext["alsowebdriver"] = _driver;
-
 
         }
         [After] //Similar to NUnit [TearDown]

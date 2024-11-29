@@ -9,7 +9,7 @@ Given I am logged in to my account using 'magmortar@pmail.com' and 'octoberComic
 
 @Extra
 Scenario Outline: Apply a coupon
-	Given I have an item '<item>' in my cart
+	Given I have added an item '<item>' to my cart
 	And I am looking at the cart contents
 	When I apply the coupon '<coupon>'
 	Then The coupon should take <discount>% off the price

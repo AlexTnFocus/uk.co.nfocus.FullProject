@@ -19,10 +19,11 @@ namespace FullProject.POMs
         public IWebElement CartContents => driver.FindElement(By.CssSelector("a[title='View your shopping cart'] span[class='count']"));
 
         //Procedures for the 'Shop' Page
-        public void AddItemToCart(string itemName)//Adds an item to the cart via linkText
+        public void AddItemToCart(string itemName, string currentCart)//Adds an item to the cart via linkText
         {
             Console.WriteLine($"a[aria-label='Add “{itemName}” to your cart']");
             driver.FindElement(By.CssSelector($"a[aria-label='Add “{itemName}” to your cart']")).Click();
+            WaitForCartUpdate(currentCart);//Waits for the cart to update, otherwise the user could be met with an empty cart later
         }
         public string GetCartContents()//Fetches the number of items currently in the cart
         {
